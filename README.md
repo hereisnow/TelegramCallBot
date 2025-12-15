@@ -1,2 +1,0 @@
-# TelegramCallBot
-Call Reminder
