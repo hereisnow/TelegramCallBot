@@ -11,7 +11,7 @@ router = APIRouter()
 
 GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
 GOOGLE_CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET")
-GOOGLE_REDIRECT_URI = os.getenv("GOOGLE_REDIRECT_URI")
+GOOGLE_REDIRECT_URI = os.getenv("GOOGLE_REDIRECT_URI")  # http://127.0.0.1:8000/auth/google/callback
 SCOPES = ["https://www.googleapis.com/auth/calendar.events"]
 
 def build_flow():
@@ -37,7 +37,6 @@ async def google_start(request: Request):
         include_granted_scopes="true",
         prompt="consent",
     )
-    # TODO: сохранить state + telegram_user_id (через query или initData)
     return RedirectResponse(auth_url)
 
 @router.get("/auth/google/callback")
@@ -48,11 +47,7 @@ async def google_callback(request: Request):
     flow.fetch_token(code=code)
 
     creds: Credentials = flow.credentials
-
-    # TODO: сохранить creds.token, creds.refresh_token, creds.expiry в БД вместе с user_id
-    # Пока просто выводим в лог
     print("ACCESS_TOKEN:", creds.token)
     print("REFRESH_TOKEN:", creds.refresh_token)
 
-    # вернём пользователя обратно в мини‑апп
     return RedirectResponse("https://cv-ai-app-179g.vercel.app/connected")
