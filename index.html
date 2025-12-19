@@ -123,13 +123,6 @@
       cursor: pointer;
     }
     .nav-btn.active { color: var(--primary); }
-    .nav-icon {
-      width: 20px;
-      height: 20px;
-      border-radius: 6px;
-      border: 1.5px solid currentColor;
-      margin-bottom: 2px;
-    }
 
     /* Create screen */
     .section-title {
@@ -233,6 +226,11 @@
           <div class="stat-value" id="stat-completed">0</div>
         </div>
       </div>
+
+      <!-- КНОПКА ПОДКЛЮЧЕНИЯ К GOOGLE -->
+      <button class="btn btn-outline" style="margin-top:12px;" onclick="connectGoogle()">
+        Connect Google Calendar
+      </button>
     </div>
 
     <div style="margin-top:16px;">
@@ -290,7 +288,6 @@
     <span>Meetings</span>
   </button>
 </nav>
-
 
 <script>
   const tg = window.Telegram?.WebApp;
@@ -541,10 +538,11 @@
     }
     return root;
   }
-  function connectGoogle() {
-  window.open("http://127.0.0.1:8000/auth/google/start", "_blank");
-}
 
+  // ====== Google Calendar connect ======
+  function connectGoogle() {
+    window.open("http://127.0.0.1:8000/auth/google/start", "_blank");
+  }
 
   // init
   initDateGrid();
