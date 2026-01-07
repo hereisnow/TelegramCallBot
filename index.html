@@ -539,9 +539,13 @@
     return root;
   }
 
-  // ====== Google Calendar connect ======
-  function connectGoogle() {
-    window.open("http://127.0.0.1:8000/auth/google/start", "_blank");
+function connectGoogle() {
+    // Получаем ID пользователя из Telegram Mini App SDK
+    const userId = tg.initDataUnsafe?.user?.id;
+    if (userId) {
+        // Передаем ID как параметр state
+        window.open(`https://vash-backend.com/auth/google/start?user_id=${userId}`, "_blank");
+    }
   }
 
   // init
