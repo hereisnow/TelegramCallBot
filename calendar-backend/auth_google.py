@@ -29,25 +29,29 @@ def build_flow():
     )
 
 @router.get("/auth/google/start")
-async def google_start(request: Request):
+async def google_start(user_id: str): # Принимаем user_id
     flow = build_flow()
     flow.redirect_uri = GOOGLE_REDIRECT_URI
-    auth_url, state = flow.authorization_url(
+    # Передаем user_id в state, чтобы получить его обратно в callback
+    auth_url, _ = flow.authorization_url(
         access_type="offline",
-        include_granted_scopes="true",
         prompt="consent",
+        state=user_id 
     )
     return RedirectResponse(auth_url)
 
 @router.get("/auth/google/callback")
 async def google_callback(request: Request):
     code = request.query_params.get("code")
+    user_id = request.query_params.get("state") # Получаем ID обратно
+    
     flow = build_flow()
     flow.redirect_uri = GOOGLE_REDIRECT_URI
     flow.fetch_token(code=code)
+    creds = flow.credentials
 
-    creds: Credentials = flow.credentials
-    print("ACCESS_TOKEN:", creds.token)
-    print("REFRESH_TOKEN:", creds.refresh_token)
-
+    # ВАЖНО: Здесь нужно сохранить creds.refresh_token в базу данных
+    # связав его с user_id. Без этого бот не сможет звонить сам.
+    # save_token_to_db(user_id, creds.refresh_token) 
+    
     return RedirectResponse("https://cv-ai-app-179g.vercel.app/connected")
