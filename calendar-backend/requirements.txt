@@ -1,6 +1,4 @@
-fastapi==0.115.5
-uvicorn[standard]==0.32.1
-google-api-python-client==2.154.0
-google-auth==2.36.0
-google-auth-oauthlib==1.2.1
-python-dotenv==1.0.1
+aiogram==2.25.1
+aiohttp==3.8.5
+google-auth-oauthlib==0.4.6
+pydantic==1.10.12
