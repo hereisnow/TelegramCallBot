@@ -3,3 +3,5 @@ apscheduler==3.10.4
 aiogram==3.13.1
 setuptools>=70.0,<71
 wheel
+fastapi
+uvicorn[standard]
