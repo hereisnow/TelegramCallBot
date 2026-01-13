@@ -2,34 +2,35 @@ import os
 from dotenv import load_dotenv
 load_dotenv()
 
-from aiogram import Bot, Dispatcher, F
-from aiogram.types import Message
+from aiogram import Bot, Dispatcher
 from aiogram.filters import CommandStart
-from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, WebAppInfo
+from aiogram.types import Message, ReplyKeyboardMarkup, KeyboardButton, WebAppInfo
 import asyncio
-from scheduler import start_scheduler  # твоя функция
+from scheduler import start_scheduler
 
-TOKEN = os.getenv('BOT_TOKEN')  # только env!
+TOKEN = os.getenv('BOT_TOKEN')
 if not TOKEN:
-    print("ERROR: BOT_TOKEN not set!")
+    print("❌ BOT_TOKEN not set! Check Railway Variables.")
     exit(1)
 
 bot = Bot(token=TOKEN)
 dp = Dispatcher()
 
 @dp.message(CommandStart())
-async def start_handler(message: Message):
+async def cmd_start(message: Message):
     kb = ReplyKeyboardMarkup(
         keyboard=[[KeyboardButton(text="📅 Open Calendar", web_app=WebAppInfo(url="https://my-call-calendar.vercel.app/"))]],
-        resize_keyboard=True
+        resize_keyboard=True, one_time_keyboard=False
     )
-    await message.answer("📅", reply_markup=kb)
+    await message.answer("📅 Добро пожаловать!", reply_markup=kb)
 
 async def main():
-    print("Starting bot...")
-    start_scheduler()  # запускает APScheduler
-    await dp.start_polling(bot, skip_updates=True)
+    print("🚀 Bot starting...")
+    start_scheduler()
+    print("📡 Polling...")
+    await dp.start_polling(bot)
 
 if __name__ == '__main__':
     asyncio.run(main())
+
 
